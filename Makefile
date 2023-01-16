@@ -64,6 +64,7 @@ $(TARGET).elf: $(objs) $(ld_file_final)
 	$(READELF) -a -W $@ > $(@).txt
 
 $(build_dir)/%.o: %.[c,S] $(build_dir)/%.d
+	$(foreach file, $<, $(CC) $(CFLAGS) -E -c $(file) -o $@.c)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(build_dir)/%.d: %.[c,S,ld] 
