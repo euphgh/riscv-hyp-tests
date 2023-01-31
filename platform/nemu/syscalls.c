@@ -11,12 +11,29 @@
 
 #undef strcmp
 #define static_assert(cond) switch(0) { case 0: case !!(long)(cond): ; }
-# define DEVICE_BASE 0xa0000000
-#define SERIAL_PORT     (DEVICE_BASE + 0x00003f8)
-# define nemu_trap(code) asm volatile("mv a0, %0; .word 0x0000006b" : :"r"(code))
-static inline void outb(uintptr_t addr, uint8_t  data) { *(volatile uint8_t  *)addr = data; }
-static inline void outw(uintptr_t addr, uint16_t data) { *(volatile uint16_t *)addr = data; }
-static inline void outl(uintptr_t addr, uint32_t data) { *(volatile uint32_t *)addr = data; }
+#define nemu_trap(code) asm volatile("mv a0, %0; .word 0x0000006b" : :"r"(code))
+
+volatile uint8_t* uartlite = 0x40600000;
+
+#define UART_LITE_RX_FIFO    0x0
+#define UART_LITE_TX_FIFO    0x4
+#define UART_LITE_STAT_REG   0x8
+#define UART_LITE_CTRL_REG   0xc
+
+#define UART_LITE_RST_FIFO   0x03
+#define UART_LITE_INTR_EN    0x10
+#define UART_LITE_TX_FULL    0x08
+#define UART_LITE_TX_EMPTY   0x04
+#define UART_LITE_RX_FULL    0x02
+#define UART_LITE_RX_VALID   0x01
+
+void uartlite_putchar(uint8_t ch) {
+  if (ch == '\n') uartlite_putchar('\r');
+
+  while (uartlite[UART_LITE_STAT_REG] & UART_LITE_TX_FULL);
+  uartlite[UART_LITE_TX_FIFO] = ch;
+}
+
 size_t strlen(const char *s)
 {
   const char *p = s;
@@ -61,7 +78,7 @@ void exit(int code)
 #undef putchar
 int putchar(int ch)
 {
-  outb(SERIAL_PORT, ch);
+  uartlite_putchar(ch);
 }
 
 static inline void printnum(void (*putch)(int, void**), void **putdat,

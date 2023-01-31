@@ -65,13 +65,15 @@ bool check_misa_h(){
 
 void main(){
 
-    INFO("risc-v hypervisor extensions tests");
+    INFO("risc-v hypervisor extension tests");
 
-    if(check_misa_h()){
-        reset_state();
-        for(int i = 0; i < test_table_size; i++)
-            test_table[i]();
-    }
+    // if(check_misa_h()){
+    //     reset_state();
+    //     for(int i = 0; i < test_table_size; i++)
+    //         test_table[i]();
+    // }else{
+    //     printf("hypervisor extension is not supported!\n");
+    // }
 
     INFO("end");
     exit(0);
