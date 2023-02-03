@@ -6,7 +6,7 @@
  *  [] test traps to hs
  *  [] test fp load/store instructions
  *  [] test hypervisor load/store instructions
- *  [] test address offset field for imnplementations that support
+ *  [] test address offset field for implementations that support
  * unaligned acceses or have highest priority for page fault than for
  * unaligned access exceptions.
  *  [] test pseudo-instructions

@@ -148,7 +148,7 @@ void hspt_init(){
         hspt[0][i] = 
             PTE_V | PTE_AD | PTE_RWX | (addr >> 2);  
         addr +=  SUPERPAGE_SIZE(0);
-    }
+    } // 1 level page, huge page, each page is 1G
 
     hspt[0][4] =
         PTE_V | (((uintptr_t)&hspt[1][0]) >> 2);

@@ -52,13 +52,13 @@ bool check_misa_h(){
 
     if(!hyp_ext_present)
         return false;
+    /*nemu don't support that misa control whether an extension is enabled or not*/
+    // CSRC(misa, (1ULL << 7));
+    // if(((CSRR(misa) & (1ULL << 7)))){
+    //     VERBOSE("misa h bit is hardwired");
+    // }
 
-    CSRC(misa, (1ULL << 7));
-    if(((CSRR(misa) & (1ULL << 7)))){
-        VERBOSE("misa h bit is hardwired");
-    }
-
-    CSRW(misa, misa);
+    // CSRW(misa, misa);
 
     TEST_END();
 }
@@ -67,13 +67,13 @@ void main(){
 
     INFO("risc-v hypervisor extension tests");
 
-    // if(check_misa_h()){
-    //     reset_state();
-    //     for(int i = 0; i < test_table_size; i++)
-    //         test_table[i]();
-    // }else{
-    //     printf("hypervisor extension is not supported!\n");
-    // }
+    if(check_misa_h()){
+        reset_state();
+        for(int i = 0; i < test_table_size; i++)
+            test_table[i]();
+    }else{
+        printf("hypervisor extension is not supported!\n");
+    }
 
     INFO("end");
     exit(0);
