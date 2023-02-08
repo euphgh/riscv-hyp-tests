@@ -323,6 +323,7 @@ void* memcpy(void* dest, const void* src, size_t len)
 
 void* memset(void* dest, int byte, size_t len)
 {
+  printf("dest:0x%lx, byte:%d, len:%d\n", dest, byte, len);
   if ((((uintptr_t)dest | len) & (sizeof(uintptr_t)-1)) == 0) {
     uintptr_t word = byte & 0xFF;
     word |= word << 8;

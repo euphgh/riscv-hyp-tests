@@ -9,7 +9,7 @@ bool virtual_instruction() {
     goto_priv(PRIV_VS);
     TEST_SETUP_EXCEPT();
     hfence_vvma();
-    TEST_ASSERT("vs executing hfence.vvma leads to virtual isntruction exception",
+    TEST_ASSERT("vs executing hfence.vvma leads to virtual instruction exception",
         excpt.triggered == true &&
         excpt.cause == CAUSE_VRTI
     ); 
@@ -17,7 +17,7 @@ bool virtual_instruction() {
     goto_priv(PRIV_VS);
     TEST_SETUP_EXCEPT();
     hfence_gvma();
-    TEST_ASSERT("vs executing hfence.gvma leads to virtual isntruction exception",
+    TEST_ASSERT("vs executing hfence.gvma leads to virtual instruction exception",
         excpt.triggered == true &&
         excpt.cause == CAUSE_VRTI
     ); 
@@ -27,7 +27,7 @@ bool virtual_instruction() {
     goto_priv(PRIV_VS);
     TEST_SETUP_EXCEPT();
     volatile uint64_t tmp = hlvd(0);
-    TEST_ASSERT("vs hlvd leads to virtual isntruction exception",
+    TEST_ASSERT("vs hlvd leads to virtual instruction exception",
         excpt.triggered == true &&
         excpt.cause == CAUSE_VRTI
     ); 
@@ -84,7 +84,7 @@ bool virtual_instruction() {
      */
 
     ////////////////////////////////////////////////////////////////////////
-
+#ifdef Xiangshan
     goto_priv(PRIV_M);
     CSRW(mcounteren, 0);
     CSRW(CSR_HCOUNTEREN, 0);
@@ -145,6 +145,6 @@ bool virtual_instruction() {
     TEST_ASSERT("vs access to cycle casuses succsseful when mcounteren.cy and hcounteren.cy set",
         excpt.triggered == false
     );
-
+#endif
     TEST_END(); 
 }
