@@ -274,6 +274,21 @@ static void vprintfmt(void (*putch)(int, void**), void **putdat, const char *fmt
   }
 }
 
+void printstr(const char* s)
+{
+  for (int i = 0; i < strlen(s); i++){
+    uartlite_putchar(s[i]);
+  }
+  
+}
+
+int puts(const char* s)
+{
+  printstr(s);
+  printstr("\n");
+  return strlen(s);
+}
+
 int printf(const char* fmt, ...)
 {
   va_list ap;
@@ -323,7 +338,6 @@ void* memcpy(void* dest, const void* src, size_t len)
 
 void* memset(void* dest, int byte, size_t len)
 {
-  printf("dest:0x%lx, byte:%d, len:%d\n", dest, byte, len);
   if ((((uintptr_t)dest | len) & (sizeof(uintptr_t)-1)) == 0) {
     uintptr_t word = byte & 0xFF;
     word |= word << 8;

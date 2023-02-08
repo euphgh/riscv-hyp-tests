@@ -136,7 +136,7 @@ struct {
 pte_t hspt[3][PAGE_SIZE/sizeof(pte_t)] __attribute__((aligned(PAGE_SIZE)));
 
 void hspt_init(){
-
+    DEBUG("hs page: %lx\n", hspt);
     uintptr_t addr;
 
     // for(int j = 0; j < 3; j++)
