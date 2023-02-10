@@ -292,7 +292,7 @@ bool m_and_hs_using_vs_access(){
     TEST_ASSERT("hs hlvxwu on vs-level non-exec page leads to lpf",
         excpt.triggered == true && 
         excpt.cause == CAUSE_LPF  && 
-        excpt.gva == false &&
+        excpt.gva == true &&
         excpt.xpv == false
     );
 
@@ -394,7 +394,7 @@ bool m_and_hs_using_vs_access(){
     hpt_init();
     
     vaddr = vs_page_base(VSI_GUR) + 1;
-    TEST_SETUP_EXCEPT();\
+    TEST_SETUP_EXCEPT();
     hsvb(vaddr, 0xdeadbeef);
     TEST_ASSERT("hs hsvb on ro 2-stage page leads to store guest page fault",
         excpt.triggered == true &&  
