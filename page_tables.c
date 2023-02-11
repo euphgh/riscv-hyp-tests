@@ -264,7 +264,7 @@ pte_t hpt_root[PAGE_SIZE*4/sizeof(pte_t)] __attribute__((aligned(PAGE_SIZE*4)));
 pte_t hpt[5][PAGE_SIZE/sizeof(pte_t)] __attribute__((aligned(PAGE_SIZE)));
 
 void hpt_init(){
-    DEBUG("g page hpt_root: %lx, htp: %lx", hpt_root, hpt);
+    DEBUG("g page hpt_root: %lx, max hpt_root: %lx htp: %lx", hpt_root, &hpt_root[2047], hpt);
     for(int i = 0; i < 2048; i++){
         hpt_root[i] = 0;
     }
