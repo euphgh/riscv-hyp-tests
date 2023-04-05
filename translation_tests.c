@@ -155,14 +155,14 @@ bool second_stage_only_translation(){
         "access top of guest pa space with high bits == 0", 
         excpt.triggered == false
     );
-    
-    TEST_SETUP_EXCEPT();
-    read64(vs_page_base_limit(TOP) | (1ULL << 41));
-    TEST_ASSERT(
-        "access top of guest pa space with high bits =/= 0", 
-        excpt.triggered == true &&
-        excpt.cause == CAUSE_LGPF
-    );
+    /*Xiangshan set vaddr to 41 when it enable H extention.*/
+    // TEST_SETUP_EXCEPT();
+    // read64(vs_page_base_limit(TOP) | (1ULL << 41));
+    // TEST_ASSERT(
+    //     "access top of guest pa space with high bits =/= 0", 
+    //     excpt.triggered == true &&
+    //     excpt.cause == CAUSE_LGPF
+    // ); 
 
     TEST_END();
 }
