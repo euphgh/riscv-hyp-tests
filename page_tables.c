@@ -258,6 +258,7 @@ void vspt_init(){
     } else {
         ERROR("");
     }
+    sfence(); // 之后会去掉，是由目前香山实现的TLB的关于两阶段地址翻译的页表存储为vpn(guest)->ppn(host)导致的，正常的实现中不会出现这个问题
 }
 
 pte_t hpt_root[PAGE_SIZE*4/sizeof(pte_t)] __attribute__((aligned(PAGE_SIZE*4)));

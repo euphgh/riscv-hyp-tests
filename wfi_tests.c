@@ -24,8 +24,8 @@ bool wfi_exception_tests() {
 
     /* Keep an interrupt pending so we don't get stuck when wfi succeeds */
     goto_priv(PRIV_M);
-    CSRS(mie, 0b0010);
-    CSRS(mip, 0b0010);
+    CSRS(mie, 0b0100);
+    CSRS(mip, 0b0100);
 
     goto_priv(PRIV_M);
     TEST_SETUP_EXCEPT();
