@@ -133,8 +133,11 @@ bool second_stage_only_translation(){
     bool check2 = read64(vaddr2) == 0x22;
     TEST_ASSERT("vs gets right values", excpt.triggered == false && check1 && check2);
 
+    goto_priv(PRIV_HS);
     hpt_switch();
-    sfence();
+    hfence(); //l2tlb
+    goto_priv(PRIV_VS);
+    sfence(); //l1tlb
     TEST_SETUP_EXCEPT();
     check1 = read64(vaddr1) == 0x22;
     check2 = read64(vaddr2) == 0x11;   
