@@ -23,8 +23,8 @@ endif
 
 prev_log_file:=$(build_dir)/prev_log.mk
 -include $(prev_log_file)
-LOG_LEVEL := LOG_INFO
-GENERIC_FLAGS += -D LOG_LEVEL=$(LOG_LEVEL)
+LOG_LEVEL ?= LOG_INFO
+GENERIC_FLAGS += -DLOG_LEVEL=$(LOG_LEVEL)
 $(file > $(prev_log_file), PREV_LOG_LEVEL:=$(LOG_LEVEL))
 ifneq ($(PREV_LOG_LEVEL), $(LOG_LEVEL))
 pre_targets += clean_objs
@@ -48,7 +48,7 @@ ld_file_final:=$(build_dir)/$(ld_file)
 deps:=$(patsubst  %.o, %.d, $(objs)) $(ld_file_final).d
 dirs:=$(sort $(dir $(objs) $(deps)))
 
-GENERIC_FLAGS += -march=rv64imac -mabi=lp64 -g3 -mcmodel=medany -O3 $(inc_dirs)
+GENERIC_FLAGS += -march=rv64gc -mabi=lp64d -g3 -mcmodel=medany -O3 $(inc_dirs)
 ASFLAGS = $(GENERIC_FLAGS)
 CFLAGS = $(GENERIC_FLAGS)
 LDFLAGS = -ffreestanding -nostartfiles -static $(GENERIC_FLAGS)
