@@ -117,20 +117,26 @@ extern size_t test_table_size;
     bool test();\
     static test_func_t test ## func __attribute__((section(".test_table"), used)) = test;
 
-#define TEST_ASSERT(test, cond, ...) {\
-    if(LOG_LEVEL >= LOG_DETAIL){\
-        size_t line_size = 60;\
-        size_t size = strlen(test);\
-        printf(CBLU "\t%-70.*s" CDFLT, line_size, test);\
-        for(int i = line_size; i < size; i+=line_size)\
-            printf(CBLU "\n\t%-70.*s" CDFLT, line_size, &test[i]);\
-        printf("%s" CDFLT, (cond) ? CGRN "PASSED" : CRED "FAILED");\
-        if(!(cond)) { printf("\n\t("); printf(""__VA_ARGS__); printf(")"); }\
-        printf("\n");\
-    }\
-    test_status = test_status && cond;\
-    /*if(!test_status) goto failed; /**/\
-}
+#define TEST_ASSERT(test, cond, ...)                                           \
+  {                                                                            \
+    __sync_synchronize();                                                      \
+    if (LOG_LEVEL >= LOG_DETAIL) {                                             \
+      size_t line_size = 60;                                                   \
+      size_t size = strlen(test);                                              \
+      printf(CBLU "\t%-70.*s" CDFLT, line_size, test);                         \
+      for (int i = line_size; i < size; i += line_size)                        \
+        printf(CBLU "\n\t%-70.*s" CDFLT, line_size, &test[i]);                 \
+      printf("%s" CDFLT, (cond) ? CGRN "PASSED" : CRED "FAILED");              \
+      if (!(cond)) {                                                           \
+        printf("\n\t(");                                                       \
+        printf(""__VA_ARGS__);                                                 \
+        printf(")");                                                           \
+      }                                                                        \
+      printf("\n");                                                            \
+    }                                                                          \
+    test_status = test_status && cond;                                         \
+    /*if(!test_status) goto failed; /**/                                       \
+  }
 
 #define TEST_SETUP_EXCEPT() {\
     __sync_synchronize();\
@@ -215,10 +221,11 @@ failed:\
     CSRW(addr, temp);\
 }
 
-#define check_csr_rd(name, addr, rd){\
-    uint64_t val = CSRR(addr);\
-    TEST_ASSERT(name, ((rd) == (val)), "%16c %016lx %016lx", '-', val, rd);\
-}
+#define check_csr_rd(name, addr, rd)                                           \
+  do {                                                                         \
+    uint64_t val = CSRR(addr);                                                 \
+    test_status = test_status && ((rd) == (val));                              \
+  } while (0)
 
 #define check_csr_rd_mask(name, addr, rd, mask){\
     uint64_t val = CSRR(addr);\
